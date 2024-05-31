@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}ade{% endblock %}
+
+{% block content %}
+  {% for menu in menu_details %}
+  <div class="product" data-name="{{ menu[2] }}" data-price="{{ menu[4] }}" data-image="{{ menu[5] }}">
+    <img src="data:image/jpeg;base64,{{ menu[5] }}" alt="Product Image" class="cart-item-image">
+    <h2>{{ menu[2] }}</h2>
+    <p>{{ menu[4] }}</p>
+  </div>
+  {% endfor %}
+{% endblock %}

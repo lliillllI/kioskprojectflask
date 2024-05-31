@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        .overlay-image {
+            position: absolute;
+            top: 300px;
+            left: 200px;
+            width: 10%;
+            height: 20%;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+<h1>화면을 클릭해주세요</h1>
+<div>
+    <video id="video" autoplay></video>
+    <img class="overlay-image" src="static/facereco.png" alt="Overlay Image">
+    <canvas id="canvas" style="display:none;"></canvas>
+</div>
+<div>
+    <button class="selection" eatdata="포장하기">포장하기</button>
+    <button class="selection" eatdata="먹고가기">먹고가기</button>
+</div>
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const buttons = document.querySelectorAll('.selection'); // 버튼 선택자 추가
+
+    // Access the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            video.addEventListener('canplaythrough', () => {
+                // Adjust canvas size based on video size
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            });
+        })
+        .catch(err => {
+            console.error(`Error accessing the camera: ${err}`);
+        });
+
+    // 버튼 클릭 이벤트 리스너 추가
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const eatData = this.getAttribute('eatdata');
+            sessionStorage.setItem('eatSelection', eatData);
+
+            const videoWidth = video.videoWidth;
+            const videoHeight = video.videoHeight;
+
+            // Adjust the canvas size to match the video size
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+
+            // Draw the video on the canvas, rotating it if necessary
+            if (videoWidth < videoHeight) {
+                // Rotate the canvas 90 degrees if the video is in portrait mode
+                context.save();
+                context.translate(canvas.width / 2, canvas.height / 2);
+
+                context.drawImage(video, -canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+                context.restore();
+            } else {
+                // Draw the video on the canvas without rotation
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            }
+
+            const imageData = canvas.toDataURL('image/png');
+
+            fetch('/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image: imageData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+</body>
+</html>
