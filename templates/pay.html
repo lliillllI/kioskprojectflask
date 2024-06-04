@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pay</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        .paycontainer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 95%; max-width: 1200px; margin: auto; padding: 20px; }
+        .payment-option {
+        width: 45%;
+        border: 2px solid transparent; /* 초기 테두리 설정 */
+        border-radius: 10px;
+        margin: 10px 0;
+        text-align: center;
+        transition: border-color 0.3s; /* 부드러운 테두리 색 변화 */
+        cursor: pointer;
+    }
+
+    .payment-option img {
+        width: 100%;
+        max-width: 100px; /* 이미지 크기 조정 */
+        margin-top: 10px;
+    }
+
+    .payment-option p {
+        margin: 10px 0;
+    }
+
+    .payment-option.selected {
+        border-color: #007bff; /* 선택됐을 때의 테두리 색 */
+    }
+    </style>
+</head>
+<body>
+<div>
+    <div id="cart" style="display:none !important">
+        <div id="cart-list" style="display:none !important"></div>
+    </div>
+    <div class="eatoption"></div>
+    <p id="total-price">결제금액</p>
+    <div>
+        <h3>결제 방법 선택</h3>
+        <div class="paycontainer">
+            <div class="payment-option" id="card" onclick="selectPaymentMethod('card')">
+                <img src="card.png" alt="카드결제">
+                <p>카드결제</p>
+            </div>
+            <div class="payment-option" id="naver" onclick="selectPaymentMethod('naver')">
+                <img src="naverpay.png" alt="Naver Pay">
+                <p>Naver Pay</p>
+            </div>
+            <div class="payment-option" id="kakao" onclick="selectPaymentMethod('kakao')">
+                <img src="kakaopay.png" alt="Kakao Pay">
+                <p>Kakao Pay</p>
+            </div>
+            <div class="payment-option" id="other" onclick="selectPaymentMethod('other')">
+                <img src="etc.png" alt="기타결제">
+                <p>기타결제</p>
+            </div>
+        </div>
+        <button type="button">결제</button>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedEatOption = sessionStorage.getItem('eatSelection');
+        const eatOptionDiv = document.querySelector('.eatoption');
+        if (selectedEatOption) {
+            eatOptionDiv.textContent = selectedEatOption;
+        } else {
+            eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
+        }
+    });
+    function selectPaymentMethod(selectedMethod) {
+    // 모든 결제 옵션의 선택 상태를 초기화
+    document.querySelectorAll('.payment-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+
+    // 선택된 결제 방법에 'selected' 클래스 추가
+    document.getElementById(selectedMethod).classList.add('selected');
+}
+</script>
+</html>

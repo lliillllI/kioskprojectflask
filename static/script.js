@@ -44,6 +44,15 @@ document.addEventListener('DOMContentLoaded', function() {
             addToCart(productName, productPrice, productImage);
         });
     });
+
+
+    const closeBtn = document.querySelector('.close_btn')
+    if(closeBtn != null){
+        closeBtn.addEventListener('click', function(){
+            document.querySelector('.modal').style.display = 'none';
+        })
+    };
+
 });
 
 function calculateTotalPrice() {
@@ -64,6 +73,8 @@ function updateTotalPrice() {
     const totalPrice = calculateTotalPrice();
     totalPriceElement.textContent = `결제 금액: ${totalPrice}원`;
 }
+
+
 
 function addToCart(name, price, image, quantity = 1) {
     const cartList = document.getElementById('cart-list');
@@ -139,4 +150,34 @@ function addToCart(name, price, image, quantity = 1) {
         cartList.appendChild(listItem);
         updateCartData();
     }
+}
+
+
+let timeLeft = 60;
+let timerId = null;
+
+function startTimer() {
+    if (timerId !== null) {
+        return; // 타이머가 이미 실행 중이면 중복 시작을 방지
+    }
+    timerId = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = timeLeft;
+        if (timeLeft === 0) {
+            resetSessionAndRedirect(); // 시간 초과 시 페이지 초기화 함수 호출
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timerId);
+    timeLeft = 60;
+    document.getElementById('timer').textContent = timeLeft;
+    timerId = null;
+    startTimer();
+}
+
+function resetSessionAndRedirect() {
+    sessionStorage.clear();
+    window.location.href = '/';
 }

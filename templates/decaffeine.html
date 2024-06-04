@@ -3,6 +3,7 @@
 {% block title %}decaffeine{% endblock %}
 
 {% block content %}
+<div id="main-content" class="container">
   {% for menu in menu_details %}
   <div class="product" data-name="{{ menu[2] }}" data-price="{{ menu[4] }}" data-image="{{ menu[5] }}">
     <img src="data:image/jpeg;base64,{{ menu[5] }}" alt="Product Image" class="cart-item-image">
@@ -10,4 +11,5 @@
     <p>{{ menu[4] }}</p>
   </div>
   {% endfor %}
+</div>
 {% endblock %}

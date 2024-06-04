@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+<div class="header">
+    <div class="hcontainer">
+        <div class = "image-container">
+            <img src="./homeicon.png">
+            <a href="#" onclick="navigateTo('/')"><p id="first">처음으로</p></a>
+        </div>
+            <div id="time">남은시간</div>
+            <div id="timer">60</div>
+            <button onclick="resetTimer()">시간초기화</button>
+    </div>
+</div>
+<div class="eatoption"></div>
+    <div id="cart">
+        <div id="cart-list"></div>
+    </div>
+    <div><button onclick="navigateTo('reco')">추가 메뉴 선택하기</button></div>
+    <div>
+        <p id="total-price">총액</p>
+        <button type="button" onclick="navigateTo('pay')">결제하기</button>
+    </div>
+</body>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedEatOption = sessionStorage.getItem('eatSelection');
+            const eatOptionDiv = document.querySelector('.eatoption');
+            if (selectedEatOption) {
+                eatOptionDiv.textContent = selectedEatOption;
+            } else {
+                eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
+            }
+        });
+</script>
+</html>
