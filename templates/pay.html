@@ -5,30 +5,183 @@
     <title>pay</title>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <style>
-        .paycontainer { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 95%; max-width: 1200px; margin: auto; padding: 20px; }
-        .payment-option {
-        width: 45%;
-        border: 2px solid transparent; /* 초기 테두리 설정 */
-        border-radius: 10px;
-        margin: 10px 0;
-        text-align: center;
-        transition: border-color 0.3s; /* 부드러운 테두리 색 변화 */
-        cursor: pointer;
-    }
+        @font-face {
+           font-family: 'GmarketSansMedium';
+           src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+           font-weight: normal;
+           font-style: normal;
+       }
 
-    .payment-option img {
-        width: 100%;
-        max-width: 100px; /* 이미지 크기 조정 */
-        margin-top: 10px;
-    }
+       body{
+           font-family: 'GmarketSansMedium';
+       }
+       h3{
+           font-weight: bold;
+           font-size: 30px;
+           margin-top: 30px;
+           margin-left : 10%;
+       }
+       .stampcontainer {
+           display: flex;
+           justify-content: space-between;
+           gap: 20px;
+           padding: 0px 40px;
+       }
 
-    .payment-option p {
-        margin: 10px 0;
-    }
+       .stamp-option {
+       width: 100%;
+       border: 2px solid #ccc;
+       border-radius: 10px;
+       margin: 10px 0;
+       text-align: center;
+       transition: border-color 0.3s;
+       cursor: pointer;
+       }
 
-    .payment-option.selected {
-        border-color: #007bff; /* 선택됐을 때의 테두리 색 */
-    }
+       .stamp-option img {
+           width: 100%;
+           max-width: 100px;
+           margin-top: 15px;
+       }
+
+       .stamp-option p {
+           font-size: 20px;
+           margin-top: 10px;
+           margin-bottom: 15px;
+       }
+
+       .stamp-option.selected {
+           border: solid 5px #ffd954;
+       }
+
+       #total-stamp {
+           text-align: center;
+           font-size: 25px;
+           color: #000000;
+           margin-top: 20px;
+       }
+
+       #total-price {
+           font-weight: bold;
+           font-size: 30px;
+           margin-top: 80px;
+           margin-left : 10%;
+       }
+
+       .paycontainer {
+           display: flex;
+           grid-template-columns: repeat(4, 1fr);
+           gap: 20px;
+           width: 95%;
+           max-width: 1200px;
+           margin: auto;
+           padding: 20px;
+       }
+
+       .payment-option {
+       width: 45%;
+       border: 2px solid #ccc;
+       border-radius: 10px;
+       margin: 10px 0;
+       text-align: center;
+       transition: border-color 0.3s;
+       cursor: pointer;
+       }
+
+       .payment-option img {
+           width: 100%;
+           max-width: 100px;
+           margin-top: 30px;
+       }
+
+       .payment-option p {
+           font-size: 20px;
+           margin-top: 10px;
+           margin-bottom: 15px;
+       }
+
+       .payment-option.selected {
+           border: solid 5px #ffd954;
+       }
+
+       .button-container {
+           text-align: center;
+       }
+
+       button {
+           background-color: #000000;
+           color: white;
+           border: none;
+           padding: 15px 25px;
+           display: inline-block;
+           font-size: 25px;
+           cursor: pointer;
+           border-radius: 30px;
+       }
+
+       button:hover {
+           background-color: #ccc;
+       }
+
+
+
+
+
+
+
+                .number-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 200px;
+            margin: 20px auto;
+        }
+
+        .number-pad button {
+            padding: 20px;
+            font-size: 1.5em;
+        }
+
+        .input-display {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -36,49 +189,157 @@
     <div id="cart" style="display:none !important">
         <div id="cart-list" style="display:none !important"></div>
     </div>
-    <div class="eatoption"></div>
-    <p id="total-price">결제금액</p>
+    <h3>적립</h3>
+    <div class="stampcontainer">
+        <div class="stamp-option" id="stampO" onclick="openModal(); selectPaymentMethod('stampO')">
+            <img src="static/stamp.png" alt="stampO">
+            <p>휴대폰번호 입력</p>
+        </div>
+        <div class="stamp-option" id="stampX" onclick="selectPaymentMethod('stampX')">
+            <img src="static/x.png" alt="stampX">
+            <p>적립안함</p>
+        </div>
+    </div>
+    <div id="stamp-info"></div>
+    <h3 id="total-price" align="center"></h3>
     <div>
-        <h3>결제 방법 선택</h3>
         <div class="paycontainer">
             <div class="payment-option" id="card" onclick="selectPaymentMethod('card')">
-                <img src="card.png" alt="카드결제">
+                <img src="static/card.png" alt="카드결제">
                 <p>카드결제</p>
             </div>
             <div class="payment-option" id="naver" onclick="selectPaymentMethod('naver')">
-                <img src="naverpay.png" alt="Naver Pay">
+                <img src="static/naverpay.png" alt="Naver Pay">
                 <p>Naver Pay</p>
             </div>
             <div class="payment-option" id="kakao" onclick="selectPaymentMethod('kakao')">
-                <img src="kakaopay.png" alt="Kakao Pay">
+                <img src="static/kakaopay.png" alt="Kakao Pay">
                 <p>Kakao Pay</p>
             </div>
-            <div class="payment-option" id="other" onclick="selectPaymentMethod('other')">
-                <img src="etc.png" alt="기타결제">
-                <p>기타결제</p>
+            <div class="payment-option" id="coupon" onclick="selectPaymentMethod('coupon')">
+                <img src="static/coupon.png" alt="쿠폰결제">
+                <p>쿠폰결제</p>
             </div>
         </div>
-        <button type="button">결제</button>
     </div>
+    <div class="button-container">
+        <button type="button" onclick="saveToDB()">결제하기</button>
+    </div>
+</div>
+
+
+<!-- 모달 창 -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="input-display" id="inputDisplay">010-</div>
+        <div class="number-pad">
+            <button onclick="inputNumber(1)">1</button>
+            <button onclick="inputNumber(2)">2</button>
+            <button onclick="inputNumber(3)">3</button>
+            <button onclick="inputNumber(4)">4</button>
+            <button onclick="inputNumber(5)">5</button>
+            <button onclick="inputNumber(6)">6</button>
+            <button onclick="inputNumber(7)">7</button>
+            <button onclick="inputNumber(8)">8</button>
+            <button onclick="inputNumber(9)">9</button>
+            <button onclick="clearInput()">C</button>
+            <button onclick="inputNumber(0)">0</button>
+            <button onclick="deleteLast()">←</button>
+        </div>
+        <div align="center">
+            <button onclick="record(); closeModal()">입력하기</button>
+        </div>
+    </div>
+</div>
+
+
 </body>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectedEatOption = sessionStorage.getItem('eatSelection');
-        const eatOptionDiv = document.querySelector('.eatoption');
-        if (selectedEatOption) {
-            eatOptionDiv.textContent = selectedEatOption;
-        } else {
-            eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
-        }
-    });
     function selectPaymentMethod(selectedMethod) {
-    // 모든 결제 옵션의 선택 상태를 초기화
-    document.querySelectorAll('.payment-option').forEach(option => {
-        option.classList.remove('selected');
-    });
+        // 선택된 메소드의 ID를 기반으로 결제 옵션인지 스탬프 옵션인지 확인
+        const selectedElement = document.getElementById(selectedMethod);
+        let optionType = '';
 
-    // 선택된 결제 방법에 'selected' 클래스 추가
-    document.getElementById(selectedMethod).classList.add('selected');
-}
+        if (selectedElement.classList.contains('payment-option')) {
+            optionType = 'payment-option';
+        } else if (selectedElement.classList.contains('stamp-option')) {
+            optionType = 'stamp-option';
+        }
+
+        // 해당 유형에만 'selected' 클래스 추가
+        if (optionType) {
+            document.querySelectorAll(`.${optionType}`).forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            selectedElement.classList.add('selected');
+        }
+    }
+
+
+
+
+
+    function openModal() {
+        document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    function inputNumber(num) {
+        const display = document.getElementById('inputDisplay');
+        let currentText = display.textContent;
+
+        if (currentText.length < 13) { // 하이픈을 포함해서 총 길이가 13
+            if (currentText.length === 8) {
+                display.textContent += '-';
+            }
+            display.textContent += num;
+        }
+    }
+
+    function clearInput() {
+        const display = document.getElementById('inputDisplay');
+        display.textContent = '010-';
+    }
+
+    function deleteLast() {
+        const display = document.getElementById('inputDisplay');
+        let currentText = display.textContent;
+
+        if (currentText.length > 4) {
+            if (currentText.length === 9) {
+                display.textContent = currentText.slice(0, -2); // 하이픈을 포함하여 삭제
+            } else {
+                display.textContent = currentText.slice(0, -1);
+            }
+        }
+    }
+
+    function record(){
+        const display = document.getElementById('inputDisplay');
+        custnum = display.textContent;
+        sessionStorage.setItem('custnum', custnum);
+        if (custnum !== null) {
+            fetch('/get_stamp_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ custnum: custnum }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('stamp-info').innerHTML = `<p id="total-stamp">${custnum}님 현재 스탬프 ${data.stamp_count}개 입니다.</p>`;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+    }
+
 </script>
 </html>

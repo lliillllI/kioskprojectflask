@@ -25,7 +25,6 @@ model = load_model('static/model.h5')
 
 @app.route('/')
 def home():
-
     return render_template('home.html')
 
 
@@ -52,10 +51,8 @@ def upload_image():
 
         predictions = model.predict(face_img)
         result = np.argmax(predictions, axis=1)
-        print(result)
         result[0] = int(result[0])
         session['prediction'] = int(result[0])
-        print("리다이렉트 asdf", session['prediction'])
 
     return jsonify({"redirect": url_for('reco')})
 
@@ -280,24 +277,67 @@ def pay():
 
 @app.route('/save', methods=['POST'])
 def save():
+    # 세션에서 'prediction' 값 가져오기
     prediction = session.get('prediction')
-    eatoption = session.get('eatSelection')
+    # 요청 본문에서 'cartData' 값 가져오기
     cart_data = request.json.get('cartData')
+    custnum = request.json.get('custnum')
 
+    # MySQL 연결 객체에서 커서 생성
     cur = mysql.connection.cursor()
 
-    # 예시: prediction과 eatoption을 테이블에 삽입
-    cur.execute("INSERT INTO your_table_name (prediction, eatoption) VALUES (%s, %s)", (prediction, eatoption))
-    mysql.connection.commit()
+    total_quantity = sum(int(item['quantity']) for item in cart_data)
 
-    # 예시: cart_data를 테이블에 삽입
+    print(total_quantity)
+    custsel = cur.execute("SELECT * FROM customer where cust_phone = %s", (custnum,))
+
+    if custsel == 0:
+        cur.execute("INSERT INTO customer (cust_phone, cust_stamp, cust_ages) VALUES (%s, %s, %s)",
+                    (custnum, total_quantity, prediction))
+    else:
+        cur.execute("UPDATE customer SET cust_stamp=cust_stamp+%s where cust_phone = %s",
+                    (total_quantity, custnum))
+    # 장바구니 데이터 반복 처리
     for item in cart_data:
-        cur.execute("INSERT INTO cart_table (name, price, image, quantity) VALUES (%s, %s, %s, %s)",
-                    (item['name'], item['price'], item['image'], item['quantity']))
-    mysql.connection.commit()
+        # 메뉴 테이블에서 해당 메뉴 정보 조회
+        sel = cur.execute("SELECT * FROM menu_reco where menu_idx = %s", (item['idx'],))
 
+        # 조회 결과가 없으면 새로 insert
+        if sel is None:
+            cur.execute("INSERT INTO menu_reco (menu_idx, reco_ages, menu_sales) VALUES (%s, %s, %s)",
+                        (item['idx'], prediction, item['quantity']))
+        # 조회 결과가 있으면 sales 수량 update
+        else:
+            cur.execute("UPDATE menu_reco SET menu_sales=menu_sales+%s where menu_idx = %s and reco_ages = %s",
+                        (int(item['quantity']), item['idx'], prediction))
+
+        # 변경 사항 커밋
+        mysql.connection.commit()
+
+    # 커서 닫기
     cur.close()
-    return 'Data saved successfully', 200
+
+    return jsonify({"redirect": url_for('home')})
+
+
+@app.route('/get_stamp_info', methods=['POST'])
+def get_stamp_info():
+    data = request.get_json()
+    custnum = data['custnum']
+
+    # MySQL 연결 객체에서 커서 생성
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT cust_stamp FROM customer WHERE cust_phone = %s", (custnum,))
+    result = cur.fetchone()
+    cur.close()
+
+    if result:
+        stamp_count = result[0]
+    else:
+        stamp_count = 0  # 고객 정보가 없으면 기본값 0 설정
+
+    return jsonify({'stamp_count': stamp_count})
+
 
 
 if __name__ == '__main__':

@@ -12,8 +12,9 @@ function saveCartData() {
         const name = item.getAttribute('data-name');
         const price = item.getAttribute('data-price-hidden');
         const image = item.getAttribute('data-image');
+        const idx = item.getAttribute('data-idx');
         let quantity = item.querySelector('.quantity').textContent;
-        cartData.push({ name, price, image, quantity });
+        cartData.push({ name, price, image, quantity, idx });
     });
 
     sessionStorage.setItem('cartData', JSON.stringify(cartData));
@@ -24,7 +25,7 @@ function loadCartData() {
     const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
 
     cartData.forEach(item => {
-        addToCart(item.name, item.price, item.image, item.quantity);
+        addToCart(item.name, item.price, item.image, item.quantity, item.idx);
     });
 }
 
@@ -41,7 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const productName = this.getAttribute('data-name');
             const productPrice = this.getAttribute('data-price');
             const productImage = this.getAttribute('data-image');
-            addToCart(productName, productPrice, productImage);
+            const productIdx = this.getAttribute('data-idx');
+            addToCart(productName, productPrice, productImage, 1, productIdx);
         });
     });
 
@@ -76,7 +78,7 @@ function updateTotalPrice() {
 
 
 
-function addToCart(name, price, image, quantity = 1) {
+function addToCart(name, price, image, quantity = 1, idx) {
     const cartList = document.getElementById('cart-list');
     let isProductAdded = false;
 
@@ -98,6 +100,7 @@ function addToCart(name, price, image, quantity = 1) {
         listItem.setAttribute('data-name', name);
         listItem.setAttribute('data-price-hidden', price);
         listItem.setAttribute('data-image', image);
+        listItem.setAttribute('data-idx', idx);
         listItem.innerHTML = `
           <img src="data:image/jpeg;base64,${image}" alt="Product Image" class="cart-item-image">
           <div class="product-info">
@@ -180,4 +183,40 @@ function resetTimer() {
 function resetSessionAndRedirect() {
     sessionStorage.clear();
     window.location.href = '/';
+}
+
+
+function saveToDB() {
+  const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
+  const custnum = sessionStorage.getItem('custnum');
+  fetch('/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ cartData: cartData, custnum: custnum })
+  })
+  .then(response => {
+    // 요청 성공 시 처리
+    console.log('Data saved successfully!');
+    sessionStorage.clear();
+    window.location.href = '/';
+  })
+  .catch(error => {
+    // 요청 실패 시 처리
+    console.error('Error saving data:', error);
+  });
+}
+
+function addToCartInTable(name, price, image, quantity = 1, idx) {
+    const cartList2 = document.querySelector('#boardlist tbody');
+    const newRow = document.createElement('tr');
+    newRow.setAttribute('class', 'cart-item');
+    newRow.innerHTML = `
+            <td class="item_image"><img src="data:image/jpeg;base64,${image}" style="width: 100px; height: 100px;"></td>
+            <td class="item_name">${name}</td>
+            <td class="item_quantity">${quantity}</td>
+            <td class="item_price">${price * quantity}</td>
+        `;
+    cartList2.appendChild(newRow);
 }

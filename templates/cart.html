@@ -3,29 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <title>cart</title>
+    <style>
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'GmarketSansMedium';
+            line-height: 1;
+            padding: 22px 10px;
+            padding-bottom: 55px;
+        }
+
+        h1{
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        #boardlist {
+        width: 80%;
+        height : 70%;
+        margin: 0 auto;
+        font-size: 16px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #ffd954;
+        }
+
+        #boardlist thead {
+        position: sticky;
+        top: 0;
+        cursor: pointer;
+        background: #ffd954;
+        color: #000000;
+        z-index: 1;
+        }
+
+        #boardlist thead tr th {
+        font-weight: bold;
+        padding: 12px 30px;
+        padding-left: 42px;
+        }
+
+        #boardlist thead tr th span {
+        padding-right: 20px;
+        background-repeat: no-repeat;
+        background-position: 100% 100%;
+        }
+
+        #boardlist tbody tr td {
+        text-align: center;
+        padding: 15px 10px;
+        font-size: 14px;
+        }
+
+        #boardlist tbody tr td.lalign {
+        text-align: left;
+        }
+
+        #total-price {
+            font-size: 25px;
+            font-weight: bold;
+            color: #000000;
+            margin-left: 20%;
+        }
+
+        .hcontainer {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        button {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            display: inline-block;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 30px;
+        }
+
+        button:hover {
+            background-color: #ffd954;
+        }
+
+    </style>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-
-<div class="header">
-    <div class="hcontainer">
-        <div class = "image-container">
-            <img src="./homeicon.png">
-            <a href="#" onclick="navigateTo('/')"><p id="first">처음으로</p></a>
+<h1>주문정보를 확인해주세요</h1>
+<div class="eatoption" align="center"></div>
+<div id="cartwrapper">
+		<div style="width: 100%; height: 450px; overflow-y: auto">
+			<table id="boardlist" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th class="item_image"><span></span></th>
+						<th class="item_name"><span>상품명</span></th>
+						<th class="item_quantity"><span>수량</span></th>
+						<th class="item_price"><span>가격</span></th>
+					</tr>
+				</thead>
+				<tbody>
+                </tbody>
+            </table>
         </div>
-            <div id="time">남은시간</div>
-            <div id="timer">60</div>
-            <button onclick="resetTimer()">시간초기화</button>
     </div>
-</div>
-<div class="eatoption"></div>
-    <div id="cart">
-        <div id="cart-list"></div>
+
+    <div id="cart" style="display:none !important">
+        <div id="cart-list" style="display:none !important"></div>
     </div>
+
+    <p id="total-price"></p>
+    <div class="hcontainer">
     <div><button onclick="navigateTo('reco')">추가 메뉴 선택하기</button></div>
-    <div>
-        <p id="total-price">총액</p>
-        <button type="button" onclick="navigateTo('pay')">결제하기</button>
+    <button type="button" onclick="navigateTo('pay')">결제하기</button>
     </div>
 </body>
 <script>
@@ -37,6 +136,13 @@
             } else {
                 eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
             }
+            const cartData = JSON.parse(sessionStorage.getItem('cartData')) || [];
+
+            cartData.forEach(item => {
+                addToCartInTable(item.name, item.price, item.image, item.quantity, item.idx);
+            });
         });
+
+
 </script>
 </html>
