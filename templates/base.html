@@ -11,13 +11,77 @@
             font-style: normal;
         }
 
+        /* 모달 */
+        .modalpop {
+            display: block;
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+        .modalpop .modal_popup {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 20px;
+            height: 220px;
+            width: 380px;
+            font-size: 25px;
+            text-align: center;
+        }
+        .modalpop .modal_popup .btn_container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+         .modalpop .modal_popup .btn_container button {
+        font-family: 'GmarketSansMedium';
+        font-size: 25px;
+        padding: 10px 20px;
+        background-color: #ffd954;
+        border: none;
+        border-radius: 5px;
+        color: #000000;
+        cursor: pointer;
+        transition: box-shadow 0.2s;
+        }
+
+        h2{
+            text-align: center;
+            font-size: 17px;
+        }
+
+        #price {
+            text-align: center;
+            font-size: 20px;
+            color: #DF0101;
+            margin-top: -5px;
+            margin-bottom: 5px;
+        }
+
+        /* homeicon */
+         .image-container {
+            display: flex;
+            align-items: center;
+        }
+        .image-container img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        /* body, header, footer */
         body {
             font-family: 'GmarketSansMedium';
             margin: 0;
             padding: 0;
             font-size: 16px;
-            padding-top: 70px;
-            padding-bottom: 70px;
         }
         .header, .footer {
             position: fixed;
@@ -32,64 +96,24 @@
             top: 0;
         }
         .footer {
+            height: 240px;
             display: grid;
-            grid-template-columns: 4fr 1fr;
+            grid-template-columns: 500px 250px;
             bottom: 0;
-        }
-
-        .image-container {
-            display: flex;
+            justify-content: center;
             align-items: center;
         }
-        .image-container img {
-            width: 45px;
-            height: auto;
-            margin-right: 10px;
-            margin-bottom: 5px;
-        }
-        #first {
-            margin: 0;
-            margin-top: 8px;
-            text-decoration: none;
-        }
-        .hcontainer1 {
+
+        .f_container {
             display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: rgba(255, 255, 255, 0.8);
             align-items: center;
-            justify-content: space-between;
-            margin-left : 0%;
-            margin-right : 20%;
+            width: 80%;
+            height: 100%;
+            margin-left: 30px;
         }
-
-        .hcontainer2 {
-            display: flex;
-            align-items: center;
-            margin-right: -15%;
-        }
-        #time {
-            margin-right: 10px;
-        }
-        #timer {
-            margin-right: 10px;
-            font-size : 35px;
-            color : red
-        }
-        .header button {
-            background-color: #ffd954;
-            color: #000000;
-            border: #000000 solid 2px;
-            border-radius: 50px;
-            padding: 8px;
-            text-align: center;
-            display: inline-block;
-            font-family: 'GmarketSansMedium';
-            font-size: 15px;
-            cursor: pointer;
-        }
-        .header button:hover {
-        background-color: #ffffff;
-        }
-
-
         .nav0, .nav1 {
             overflow: hidden;
             display: flex;
@@ -155,120 +179,107 @@
         .product { border: 1px solid #ddd; padding: 10px; }
         .product img { max-width: 100%; height: auto; }
 
-        .footer button {
-            padding: 10px 20px;
+        /* 제한시간 */
+        #time {
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        #timer {
+            font-size : 35px;
+            color : red
+        }
+        .time {
+            font-family: 'GmarketSansMedium';
+            font-size: 15px;
+            background-color: #ffffff;
+            color: #000000;
+            border: #000000 solid 2px;
+            border-radius: 50px;
+            padding: 8px;
+            text-align: center;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* 총 결제 금액, 결제하기 버튼 */
+        .pay {
+            font-family: 'GmarketSansMedium';
+            font-size: 18px;
+            padding: 8px;
             margin: 0 10px;
+            width: 130px;
+            height: 50px;
+            border: #000000 solid 2px;
+            border-radius: 50px;
             background-color: #000401cc;
-            color: #fff;
+            color: #ffffff;
             border: none;
             cursor: pointer;
         }
-        .footer button:hover {
+        .pay:hover {
             background-color: #ffffff;
+            border: #000000 solid 2px;
             color: #000000;
         }
+
+        #total-price{
+            font-size: 19px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        /* 카트 */
         #cart-list {
             display : flex;
             overflow-x: auto;
         }
         .cart-item {
           flex-shrink: 0;
-          margin-right: 20px;
+          margin-right: 25px;
         }
         .cart-item-image {
-          max-width: 100px;
+          max-width: 110px;
           height: auto;
         }
-
-        @media (min-width: 768px) {
-          .container { padding-top: 200px;
-            padding-bottom: 270px; }
-          body { font-size: 18px; }
+        .product-name, .product-price{
+        font-size: 18px;
+        margin-top: 5px;
+        margin-bottom: 0px;
         }
-
-        @media (min-width: 1024px) {
-          .container { padding-top: 200px;
-            padding-bottom: 270px; }
-          body { font-size: 20px; }
+        .minus-btn, .plus-btn{
+        font-size: 15px;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 30px;
+        margin: 3px;
+        padding: 1px 0px 1px;
         }
-
-        /*모달 팝업 영역 스타일링*/
-        .modal {
-        /*팝업 배경*/
-            display: block;
-            position: absolute;
-            top:0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .modal .modal_popup {
-        /*팝업*/
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 20px;
-        }
-        .modal .modal_popup .close_btn {
-            display: block;
-            padding: 10px 20px;
-            background-color: rgb(116, 0, 0);
-            border: none;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-            transition: box-shadow 0.2s;
-        }
-        .modal .modal_popup .move_btn {
-            display: block;
-            padding: 10px 20px;
-            background-color: rgb(116, 0, 0);
-            border: none;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-            transition: box-shadow 0.2s;
+        .delete-btn {
+        font-size: 10px;
+        font-family: 'GmarketSansMedium';
+        text-align: center;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 10%;
+        width: 50px;
+        height: 30px;
         }
     </style>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    <script>
-        navigator.mediaDevices.getUserMedia({ video: false });
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectedEatOption = sessionStorage.getItem('eatSelection');
-            const eatOptionDiv = document.querySelector('.eatoption');
-            if (selectedEatOption) {
-                eatOptionDiv.textContent = selectedEatOption;
-            } else {
-                eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
-            }
-        });
-    </script>
+
 </head>
 <body>
 
 <div class="header">
-    <div class="hcontainer1">
-        <div class = "image-container">
-            <a href="#" onclick="navigateTo('/')">
-                <img src="static/homeicon.png">
-                <p id="first">처음으로</p>
-            </a>
-        </div>
-        <div class="hcontainer2">
-            <div id="time">남은시간</div>
-            <div id="timer">60</div>
-            <button onclick="resetTimer()">시간초기화</button>
-        </div>
-    </div>
-    {% if prediction != 1 %}
     <div class="nav0">
+            <a href="#" class = "image-container" onclick="navigateTo('/')">
+                <img src="static/homeicon.png"> 처음으로
+            </a>
             <a href="#" onclick="navigateTo('/reco')">추천메뉴</a>
             <a href="#" onclick="navigateTo('/coffee')">커피</a>
             <a href="#" onclick="navigateTo('/tea')">티</a>
@@ -277,14 +288,8 @@
             <a href="#" onclick="navigateTo('/decaffeine')">디카페인</a>
             <a href="#" onclick="navigateTo('/beverage')">음료</a>
     </div>
-    {% else %}
-    <div class="nav1">
-            <a href="#" onclick="navigateTo('/senior')">추천메뉴</a>
-            <a href="#" onclick="navigateTo('/scoffee')">커피O</a>
-            <a href="#" onclick="navigateTo('/snoncoffee')">커피X</a>
-    </div>
-    {% endif %}
 </div>
+
 
 {% block content %}{% endblock %}
 
@@ -292,10 +297,14 @@
     <div id="cart">
         <div id="cart-list"></div>
     </div>
+    <div class="f_container">
     <div>
-        <div class="eatoption"></div>
+        <div id="time">남은시간</div>
+        <div id="timer">60</div>
+        <button class="time" onclick="resetTimer()">시간초기화</button>
+    </div>
         <p id="total-price">총액</p>
-        <button type="button" onclick="navigateTo('/cart')">결제하기</button>
+        <button type="button" class="pay" onclick="navigateToPay('/pay')">결제하기</button>
     </div>
 </div>
 
@@ -305,5 +314,7 @@
     window.onload = function() {
         startTimer();
     };
+    const prediction = {{ prediction | tojson | safe }};
+
 </script>
 </html>

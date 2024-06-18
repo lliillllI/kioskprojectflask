@@ -11,6 +11,12 @@
             font-style: normal;
         }
 
+        .eatoption{
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        }
+
         body {
             background: #ffffff;
             font-family: 'GmarketSansMedium';
@@ -25,16 +31,15 @@
         }
 
         #boardlist {
-        width: 80%;
+        width: 90%;
         height : 70%;
         margin: 0 auto;
-        font-size: 16px;
         margin-bottom: 15px;
-        border-bottom: 2px solid #ffd954;
         }
 
         #boardlist thead {
         position: sticky;
+        font-size: 15px;
         top: 0;
         cursor: pointer;
         background: #ffd954;
@@ -57,18 +62,34 @@
         #boardlist tbody tr td {
         text-align: center;
         padding: 15px 10px;
-        font-size: 14px;
+        font-size: 18px;
         }
 
         #boardlist tbody tr td.lalign {
         text-align: left;
         }
 
+        #boardlist td {
+        border-bottom: 1px solid #dee2e6;
+        }
+
+        .fixed-bottom-border {
+          position: sticky;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 86%;
+          height: 2.5px;
+          margin-left: 7%;
+          background: #ffd954;
+        }
+
         #total-price {
-            font-size: 25px;
+            font-size: 40px;
             font-weight: bold;
             color: #000000;
-            margin-left: 20%;
+            margin-top: 50px;
+            text-align: center;
         }
 
         .hcontainer {
@@ -78,8 +99,34 @@
             margin: 0 auto;
             margin-top: 40px;
         }
-
-        button {
+        .minus-btn, .plus-btn {
+            background-color: #000000;
+            color: white;
+            border: none;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+        .plus, .minus {
+        font-size: 20px;
+        }
+        .quantity {
+        margin-left: 7px;
+        margin-right: 7px;
+        }
+       .delete-btn{
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            display: inline-block;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 30px;
+        }
+       .c-btn {
             background-color: #000000;
             color: white;
             border: none;
@@ -90,7 +137,7 @@
             border-radius: 30px;
         }
 
-        button:hover {
+        .c-btn:hover {
             background-color: #ffd954;
         }
 
@@ -101,7 +148,7 @@
 <h1>주문정보를 확인해주세요</h1>
 <div class="eatoption" align="center"></div>
 <div id="cartwrapper">
-		<div style="width: 100%; height: 450px; overflow-y: auto">
+		<div style="width: 100%; height: 600px; overflow-y: auto">
 			<table id="boardlist" width="100%" border="0" cellspacing="0" cellpadding="0">
 				<thead>
 					<tr>
@@ -109,11 +156,13 @@
 						<th class="item_name"><span>상품명</span></th>
 						<th class="item_quantity"><span>수량</span></th>
 						<th class="item_price"><span>가격</span></th>
+                        <th class="item_delete"><span>삭제</span></th>
 					</tr>
 				</thead>
 				<tbody>
                 </tbody>
             </table>
+            <div class="fixed-bottom-border"></div>
         </div>
     </div>
 
@@ -123,8 +172,8 @@
 
     <p id="total-price"></p>
     <div class="hcontainer">
-    <div><button onclick="navigateTo('reco')">추가 메뉴 선택하기</button></div>
-    <button type="button" onclick="navigateTo('pay')">결제하기</button>
+    <div><button class="c-btn" onclick="navigateTo('senior')">추가 메뉴 선택하기</button></div>
+    <button type="button"class="c-btn" onclick="navigateToPay2('pay')">결제하기</button>
     </div>
 </body>
 <script>
@@ -141,6 +190,7 @@
             cartData.forEach(item => {
                 addToCartInTable(item.name, item.price, item.image, item.quantity, item.idx);
             });
+
         });
 
 

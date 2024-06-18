@@ -12,6 +12,14 @@
             font-style: normal;
         }
 
+        img {
+            display: block;
+            margin: 0 auto;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            width: 130px;
+        }
+
         .selection-container {
             display: flex;
             justify-content: center;
@@ -19,16 +27,18 @@
         .selection {
             display: inline-block;
             padding: 25px 35px;
-            margin: 30px 50px;
+            margin: 10px 50px;
+            height: 100px;
             font-family: 'GmarketSansMedium';
             font-size: 40px;
             cursor: pointer;
-            background-color: #ccc;
+            background-color: #ffd954;
+            color: #000000;
             border: none;
             border-radius: 5px;
         }
         .selection:hover {
-            background-color: #ffd954;
+            background-color: #ccc;
         }
 
         .videobox {
@@ -37,60 +47,43 @@
             align-items: center;
         }
 
+        #video {
+            width: 55%;
+            height: auto;
+        }
+
         .overlay-image {
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 45%;
             transform: translate(-50%, -50%);
-            width: 10%;
-            height: 20%;
+            width: 25%;
+            height: 30%;
             opacity: 0.5;
         }
+        p{
+        font-family: 'GmarketSansMedium';
+        font-size: 33px;
+        text-align: center;
+        color: red;
+        }
 
-        .info-box {
-            border-top: 4px solid #000000;
-            border-bottom: 4px solid #000000;
-            padding: 20px;
-            width: 50%;
-            margin: 30px auto;
-            text-align: center;
-        }
-        .info1 {
-            font-family: 'GmarketSansMedium';
-            font-weight: bold;
-            font-size: 25px;
-
-        }
-        .info2 {
-            font-family: 'GmarketSansMedium';
-            font-weight: normal;
-            font-size: 18px;
-            color: #424242;
-        }
 
     </style>
 </head>
 <body>
-    <div class="selection-container">
-        <button class="selection" eatdata="포장하기">포장하기</button>
-        <button class="selection" eatdata="먹고가기">먹고가기</button>
-    </div>
+    <img src="static/FMK_logo.png" alt="logoicon">
 
 <div class="videobox">
     <video id="video" autoplay></video>
     <img class="overlay-image" src="static/facereco.png" alt="Overlay Image">
     <canvas id="canvas" style="display:none;"></canvas>
 </div>
-
-<div class="info-box">
-<h2 class="info1">※개인정보 수집‧이용 동의 안내※</h2>
-<h2 class="info2">
-    <br>수집 목적: 연령분류
-    <br>수집 항목: 얼굴이 식별된 이미지
-    <br>보유 및 이용기간: 키오스크 이용 시작 후 24시간</h2>
-<h2 class="info1">화면을 터치하시면 개인정보 수집 및 이용에<br> 동의하시는 것으로 간주됩니다.</h2>
-
-</div>
+    <p>화면 안 박스에 얼굴을 맞춰주세요</p>
+    <div class="selection-container">
+        <button class="selection" eatdata="포장하기">포장하기</button>
+        <button class="selection" eatdata="먹고가기">먹고가기</button>
+    </div>
 
 <script>
     const video = document.getElementById('video');
@@ -151,6 +144,8 @@
             .then(data => {
                 if(data.redirect) {
                     window.location.href = data.redirect;
+                } else if (data.error) {
+                    alert(data.error);
                 }
             })
             .catch(error => {

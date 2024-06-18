@@ -4,8 +4,12 @@
 
 {% block content %}
 <div id="main-content" class="container">
+    <button onclick="filterProducts('0')" id="hotdrink">
+        <img src="static/hot.png"><span>뜨거운 음료</span></button>
+    <button onclick="filterProducts('1')" id="icedrink">
+        <img src="static/ice.png"><span>차가운 음료</span></button>
     {% for menu in menu_details %}
-    <div class="product" data-name="{{ menu[2] }}" data-price="{{ menu[4] }}" data-image="{{ menu[5] }}" data-idx="{{ menu[0] }}">
+    <div class="product" data-name="{{ menu[2] }}" data-price="{{ menu[4] }}" data-image="{{ menu[5] }}" data-idx="{{ menu[0] }}" data-type="{{ menu[6] }}">
         <img src="data:image/jpeg;base64,{{ menu[5] }}" alt="Product Image" class="cart-item-image">
         <h2>{{ menu[2] }}</h2>
         <p>{{ menu[4] }}</p>

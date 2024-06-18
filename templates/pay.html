@@ -21,6 +21,11 @@
            margin-top: 30px;
            margin-left : 10%;
        }
+       .eatoption{
+           font-size: 35px;
+           margin-top: 50px;
+       }
+
        .stampcontainer {
            display: flex;
            justify-content: space-between;
@@ -71,10 +76,10 @@
        .paycontainer {
            display: flex;
            grid-template-columns: repeat(4, 1fr);
+           justify-content: space-between;
            gap: 20px;
            width: 95%;
            max-width: 1200px;
-           margin: auto;
            padding: 20px;
        }
 
@@ -106,6 +111,7 @@
 
        .button-container {
            text-align: center;
+           margin-top: 30px;
        }
 
        button {
@@ -129,7 +135,7 @@
 
 
 
-                .number-pad {
+            .number-pad {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
@@ -138,14 +144,19 @@
         }
 
         .number-pad button {
+            background-color: #ffd954;
+            border-radius: 8px;
+            height: 65px;
             padding: 20px;
             font-size: 1.5em;
+            font-wight: bold;
         }
 
         .input-display {
             text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            font-size: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
         }
 
         .modal {
@@ -162,7 +173,7 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto;
+            margin: 30% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
@@ -182,6 +193,22 @@
             text-decoration: none;
             cursor: pointer;
         }
+        #input{
+           background-color: #000000;
+           color: #fff;
+           border: none;
+           padding: 15px 25px;
+           display: inline-block;
+           font-size: 20px;
+           cursor: pointer;
+           border-radius: 30px;
+           margin-top: 10px;
+           margin-bottom: 15px;
+       }
+
+       button:hover {
+           background-color: #ccc;
+       }
     </style>
 </head>
 <body>
@@ -189,6 +216,7 @@
     <div id="cart" style="display:none !important">
         <div id="cart-list" style="display:none !important"></div>
     </div>
+    <h3 class="eatoption" align="center" style="margin-left:0;!important"></h3>
     <h3>적립</h3>
     <div class="stampcontainer">
         <div class="stamp-option" id="stampO" onclick="openModal(); selectPaymentMethod('stampO')">
@@ -201,13 +229,14 @@
         </div>
     </div>
     <div id="stamp-info"></div>
-    <h3 id="total-price" align="center"></h3>
+    <div id="total-price" style="margin-left:80px;!important"></div>
     <div>
         <div class="paycontainer">
             <div class="payment-option" id="card" onclick="selectPaymentMethod('card')">
                 <img src="static/card.png" alt="카드결제">
                 <p>카드결제</p>
             </div>
+            {% if cartpage != 1 %}
             <div class="payment-option" id="naver" onclick="selectPaymentMethod('naver')">
                 <img src="static/naverpay.png" alt="Naver Pay">
                 <p>Naver Pay</p>
@@ -216,6 +245,7 @@
                 <img src="static/kakaopay.png" alt="Kakao Pay">
                 <p>Kakao Pay</p>
             </div>
+            {% endif %}
             <div class="payment-option" id="coupon" onclick="selectPaymentMethod('coupon')">
                 <img src="static/coupon.png" alt="쿠폰결제">
                 <p>쿠폰결제</p>
@@ -248,7 +278,7 @@
             <button onclick="deleteLast()">←</button>
         </div>
         <div align="center">
-            <button onclick="record(); closeModal()">입력하기</button>
+            <button id="input" onclick="record(); closeModal()">입력하기</button>
         </div>
     </div>
 </div>
@@ -272,13 +302,22 @@
             document.querySelectorAll(`.${optionType}`).forEach(option => {
                 option.classList.remove('selected');
             });
-
             selectedElement.classList.add('selected');
         }
+
+        // 결제 옵션을 total-price 옆에 표시
+        if (optionType === 'payment-option') {
+            const totalPriceElement = document.getElementById('total-price');
+            const paymentMethodText = selectedElement.querySelector('p').innerText;
+
+            // total-price 요소에서 기존 결제 옵션 텍스트 제거
+            const totalPriceText = totalPriceElement.innerText;
+            const updatedTotalPriceText = totalPriceText.replace(/\s*\(.*\)$/, '');
+
+            // 새로운 결제 옵션 텍스트로 업데이트
+            totalPriceElement.innerHTML = `${updatedTotalPriceText} (${paymentMethodText})`;
+        }
     }
-
-
-
 
 
     function openModal() {
@@ -340,6 +379,17 @@
                 });
             }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+            const selectedEatOption = sessionStorage.getItem('eatSelection');
+            const eatOptionDiv = document.querySelector('.eatoption');
+            if (selectedEatOption) {
+                eatOptionDiv.textContent = selectedEatOption;
+            } else {
+                eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
+            }
+    });
+
 
 </script>
 </html>

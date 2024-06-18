@@ -11,6 +11,49 @@
             font-style: normal;
         }
 
+        .image-container {
+            float: left;
+            display: block;
+            border: none;
+            border-radius: 20px;
+            background-color: #000401cc;
+            width: 230px;
+            height: 50px;
+            margin: 5px 1px;
+            color: white;
+            text-align: center;
+            padding: 20px 20px;
+            text-decoration: none;
+            font-size: 40px;
+            white-space: nowrap;
+        }
+
+        #voiceicon {
+        margin: 5px 0px -5px -30px;
+        }
+
+        #record-btn {
+            float: right;
+            display: block;
+            border: none;
+            border-radius: 20px;
+            background-color: #000401cc;
+            width: 280px;
+            height: 90px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 40px;
+            white-space: nowrap;
+        }
+        .container1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-left : 10%;
+            margin-right : 10%;
+        }
+
         body {
             font-family: 'GmarketSansMedium';
             margin: 0;
@@ -47,32 +90,7 @@
             margin-right: 10px;
             margin-bottom: 5px;
         }
-        #first {
-            margin: 0;
-            margin-top: 8px;
-            text-decoration: none;
-        }
-        .hcontainer1 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-left : 0%;
-            margin-right : 20%;
-        }
 
-        .hcontainer2 {
-            display: flex;
-            align-items: center;
-            margin-right: -15%;
-        }
-        #time {
-            margin-right: 10px;
-        }
-        #timer {
-            margin-right: 10px;
-            font-size : 35px;
-            color : red
-        }
         .header button {
             background-color: #ffd954;
             color: #000000;
@@ -90,26 +108,14 @@
         }
 
 
-        .nav0, .nav1 {
+         .nav1 {
             overflow: hidden;
             display: flex;
             flex-wrap: wrap;
-        }
-        .nav0 a {
-            float: left;
-            display: block;
-            border: none;
-            border-radius: 20px;
-            background-color: #000401cc;
-            width: 150px;
-            margin: 5px 1px;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-            font-size: 20px;
-            white-space: nowrap;
-            flex: 0 0 calc(20% - 10px);
+            display: flex;
+            align-items: center;
+            margin-left : 0%;
+            margin-right : 5%;
         }
 
         .nav1 a {
@@ -118,9 +124,9 @@
             border: none;
             border-radius: 20px;
             background-color: #000401cc;
-            width: 230px;
+            width: 210px;
             height: 50px;
-            margin: 5px 1px;
+            margin: 5px 3px;
             color: white;
             text-align: center;
             padding: 20px 20px;
@@ -128,97 +134,291 @@
             font-size: 40px;
             white-space: nowrap;
         }
-        .nav0 a:hover, .nav1 a:hover {
+        .nav1 a:hover {
             background-color: #ffffff;
             color: black;
         }
-        .container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 95%; max-width: 1200px; margin: auto; padding: 20px; }
-        .container.recommendation-page { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 95%; max-width: 1200px; margin: auto; padding: 20px; }
-        .product { border: 1px solid #ddd; padding: 10px; }
-        .product img { max-width: 100%; height: auto; }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 200px;
+            padding-bottom: 270px;
+            }
+        .container.recommendation-page {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 95%;
+            max-width: 1200px;
+            margin: auto;
+            padding-top: 200px;
+            padding-bottom: 270px;
+            }
+        .product { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        .product img { max-width: 60%; height: auto; display: block; margin: 0 auto;}
+        h2{
+            text-align: center;
+            font-size: 40px;
+            margin-top: 0px;
+        }
+        p{
+            text-align: center;
+            font-size: 40px;
+            color: #DF0101;
+            margin-top: -30px;
+            margin-bottom: 10px;
+        }
+        #hotdrink,
+        #icedrink {
+            background-color: #fff;
+            border: #000 solid 3px;
+            border-radius: 40px;
+            font-family: 'GmarketSansMedium';
+            color: #000;
+            width: 300px;
+            height: 80px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 23px;
+            margin-left: 40px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #hotdrink:hover,
+        #icedrink:hover{
+            background-color: #d3d3d3;
+        }
+
+        #hotdrink span,
+        #icedrink span {
+            vertical-align: middle;
+        }
+
+        #hotdrink img,
+        #icedrink img {
+            vertical-align: middle;
+            width: 50px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: center;
+        }
+
 
         .footer button {
+            width: 280px;
+            height: 90px;
+            font-family: 'GmarketSansMedium';
+            font-size: 40px;
+            font-wight: bold;
             padding: 10px 20px;
             margin: 0 10px;
             background-color: #000401cc;
             color: #fff;
             border: none;
+            border-radius: 50px;
             cursor: pointer;
         }
         .footer button:hover {
             background-color: #ffffff;
             color: #000000;
         }
-        #cart-list {
-            display : flex;
-            overflow-x: auto;
-        }
-        .cart-item {
-          flex-shrink: 0;
-          margin-right: 20px;
-        }
-        .cart-item-image {
-          max-width: 100px;
-          height: auto;
+
+        .modal {
+            display: none;
+            position: fixed;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
         }
 
-        @media (min-width: 768px) {
-          .container { padding: 40px; }
-          body { font-size: 18px; }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 30% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
         }
 
-        @media (min-width: 1024px) {
-          .container { padding: 60px; }
-          body { font-size: 20px; }
+        #confirmAddToCart,
+        #cancelAddToCart{
+            font-family: 'GmarketSansMedium';
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #ffd954;
+            border: none;
+            border-radius: 5px;
+            color: #000000;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+            margin: 20px;
         }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        ]
+
+
     </style>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    <script>
-        navigator.mediaDevices.getUserMedia({ video: false });
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectedEatOption = sessionStorage.getItem('eatSelection');
-            const eatOptionDiv = document.querySelector('.eatoption');
-            if (selectedEatOption) {
-                eatOptionDiv.textContent = selectedEatOption;
-            } else {
-                eatOptionDiv.textContent = '선택된 옵션이 없습니다.';
-            }
-        });
-    </script>
 </head>
 <body>
 
+
 <div class="header">
-    <div class="hcontainer">
-        <div class = "image-container">
-            <a href="#" onclick="navigateTo('/')">
-                <img src="static/homeicon.png">
-                <p id="first">처음으로</p>
-            </a>
-        </div>
+    <div class="container1">
+    <a href="#" class = "image-container" onclick="navigateTo('/')">
+                <img src="static/homeicon.png"> 처음으로
+    </a>
+        <button id="record-btn" class = "image-container">
+            <img src="static/voiceicon.png" id="voiceicon">
+            <span>음성인식</span>
+        </button>
+<!--        <button id="stopButton">중지</button>-->
+        <audio id="audio" controls style="display:none"></audio>
     </div>
 
-    <div class="nav">
-            <a href="#" onclick="navigateTo('/senior')">추천메뉴</a>
-            <a href="#" onclick="navigateTo('/scoffee')">커피O</a>
-            <a href="#" onclick="navigateTo('/snoncoffee')">커피X</a>
+    <div class="nav1">
+        <a href="#" onclick="navigateTo('/senior')">추천메뉴</a>
+        <a href="#" onclick="navigateTo('/scoffee')">커피O</a>
+        <a href="#" onclick="navigateTo('/snoncoffee')">커피X</a>
     </div>
 </div>
 
-    {% block content %}{% endblock %}
+
+{% block content %}{% endblock %}
+
+<!-- 모달 창 -->
+<div id="confirmationModal" class="modal">
+    <div class="modal-content" align="center">
+        <span class="close-button">&times;</span>
+        <div id="modalimg"></div>
+        <h2 id="modaltext"></h2>
+        <button id="confirmAddToCart">확인</button>
+        <button id="cancelAddToCart">취소</button>
+    </div>
+</div>
+
+
 
 <div class="footer">
-    <div id="cart">
-        <div id="cart-list"></div>
+
+    <button type="button" onclick="navigateTo('/cart')">결제하기</button>
+
+
+    <div id="cart" style="display:none">
+        <div id="cart-list" style="display:none"></div>
     </div>
-    <div>
-        <div class="eatoption"></div>
-        <p id="total-price">총액</p>
-        <button type="button" onclick="navigateTo('/pay')">결제하기</button>
-    </div>
+<!--    <div>-->
+<!--        <div class="eatoption" style="display:none !important"></div>-->
+    <p id="total-price" style="display:none !important">총액</p>
+<!--    </div>-->
 </div>
 
 </body>
+<script>
 
+const prediction = {{ prediction | tojson | safe }};
+
+        const recordBtn = document.getElementById('record-btn');
+        const audioElement = document.getElementById('audio');
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        recordBtn.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        audioChunks.push(event.data);
+                    });
+
+                    mediaRecorder.addEventListener('stop', () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioElement.src = audioUrl;
+
+                        // Upload the audio file to the server
+                        const formData = new FormData();
+                        formData.append('audio', audioBlob, 'recording.wav');
+                        fetch('/upload_audio', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log('업로드성공');
+                                fetch('/predict_command', { method: 'GET' })
+                                  .then(response => {
+                                    if (!response.ok) {
+                                      throw new Error('Network response was not ok ' + response.statusText);
+                                    }
+                                    return response.text();
+                                  })
+                                  .then(data => {
+                                    console.log('Predicted Command:', data);
+                                    document.querySelectorAll('.product').forEach(item => {
+                                        const productName = item.getAttribute('data-name');
+
+                                        if (productName === data) {
+                                            const productPrice = item.getAttribute('data-price');
+                                            const productImage = item.getAttribute('data-image');
+                                            const productIdx = item.getAttribute('data-idx');
+
+                                            addToCart(productName, productPrice, productImage, 1, productIdx);
+                                            alert(data+'가 장바구니에 추가되었습니다!')
+                                        }
+                                    });
+                                  })
+                                  .catch(error => {
+                                    console.error('There was a problem with the fetch operation:', error);
+                                  });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error uploading audio:', error);
+                        });
+                    });
+
+                    recordBtn.disabled = true;
+
+                    setTimeout(() => {
+                        mediaRecorder.stop();
+                        recordBtn.disabled = false;
+                    }, 3000);  // Stop recording after 4 seconds
+                })
+                .catch(error => {
+                    console.error('Error accessing microphone:', error);
+                });
+        });
+
+</script>
 </html>

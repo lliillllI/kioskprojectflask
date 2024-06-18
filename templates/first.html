@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'GmarketSansMedium';
+            height: 100%;
+            margin: 0;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        img {
+            display: block; 
+            margin: 0 auto;
+            margin-top: 50px;
+            width: 600px;
+            margin-bottom: -30px;
+        }
+        .info-box {
+            border-top: 4px solid #000000;
+            border-bottom: 4px solid #000000;
+            padding: 20px;
+            width: 60%;
+            margin: 30px auto; 
+            text-align: center;
+        }
+        .info1 {
+            font-family: 'GmarketSansMedium';
+            font-weight: bold;
+            font-size: 20px;
+            
+        }
+        .info2 {
+            font-family: 'GmarketSansMedium';
+            font-weight: normal;
+            font-size: 15px;
+            color: #424242;
+        }
+    </style>
+</head>
+<body>
+    <img src="static/FMK_logo.png" alt="logoicon">
+    <div class="info-box">
+        <h2 class="info1">※개인정보 수집‧이용 동의 안내※</h2>
+        <h2 class="info2"> 
+            <br>수집 목적: 연령분류
+            <br>수집 항목: 얼굴이 식별된 이미지
+            <br>보유 및 이용기간: 키오스크 이용 시작 후 24시간</h2>
+        <h2 class="info1">화면을 터치하시면 개인정보 수집 및 이용에<br> 동의하시는 것으로 간주됩니다.</h2>
+    </div>
+</body>
+
+<script>
+    document.body.addEventListener('click', function(){
+        window.location.href = '/home'
+    });
+</script>
+
+</html>

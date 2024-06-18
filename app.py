@@ -6,6 +6,8 @@ import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
+import os
+
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -24,6 +26,10 @@ mysql = MySQL(app)
 model = load_model('static/model.h5')
 
 @app.route('/')
+def first():
+    return render_template('first.html')
+
+@app.route('/home')
 def home():
     return render_template('home.html')
 
@@ -39,6 +45,10 @@ def upload_image():
     img = cv2.imread('captured_image.png')
     face_cascade = cv2.CascadeClassifier("static/haarcascade_frontalface_default.xml")
     faces = face_cascade.detectMultiScale(img, 1.1, 4)
+
+    if len(faces) == 0:
+        return jsonify({"error": "사진을 다시 찍어주세요"}), 400
+
     for (x, y, w, h) in faces:
         cropped_face = img[y:y + h, x:x + w]
         cv2.imwrite('cropped_face.png', cropped_face)
@@ -60,8 +70,9 @@ def upload_image():
 @app.route('/reco')
 def reco():
     prediction = session.get('prediction', 'No prediction available')
+
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM menu")
+    cur.execute("SELECT DISTINCT * FROM menu m JOIN menu_reco mr ON m.menu_idx = mr.menu_idx and mr.reco_ages = %s ORDER BY mr.menu_sales DESC;", (prediction,))
     menu_details = cur.fetchall()
 
     cur.close()
@@ -81,6 +92,7 @@ def reco():
 
 @app.route('/coffee')
 def coffee():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where menu_category='커피'")
     menu_details = cur.fetchall()
@@ -97,10 +109,11 @@ def coffee():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('coffee.html', menu_details=updated_menu_details)
+    return render_template('coffee.html', menu_details=updated_menu_details, prediction=prediction)
 
 @app.route('/tea')
 def tea():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where menu_category='티'")
     menu_details = cur.fetchall()
@@ -117,13 +130,14 @@ def tea():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('tea.html', menu_details=updated_menu_details)
+    return render_template('tea.html', menu_details=updated_menu_details, prediction=prediction)
 
 
 @app.route('/ade')
 def food():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM menu where menu_category='에이드&주스'")
+    cur.execute("SELECT * FROM menu where menu_category='에이드/주스'")
     menu_details = cur.fetchall()
 
     cur.close()
@@ -138,13 +152,14 @@ def food():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('ade.html', menu_details=updated_menu_details)
+    return render_template('ade.html', menu_details=updated_menu_details, prediction=prediction)
 
 
 @app.route('/smoothie')
 def product():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM menu where menu_category='스무디&프라페'")
+    cur.execute("SELECT * FROM menu where menu_category='스무디/프라페'")
     menu_details = cur.fetchall()
 
     cur.close()
@@ -159,12 +174,13 @@ def product():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('smoothie.html', menu_details=updated_menu_details)
+    return render_template('smoothie.html', menu_details=updated_menu_details, prediction=prediction)
 
 
 
 @app.route('/decaffeine')
 def decaffeine():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where menu_category='디카페인'")
     menu_details = cur.fetchall()
@@ -181,11 +197,12 @@ def decaffeine():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('decaffeine.html', menu_details=updated_menu_details)
+    return render_template('decaffeine.html', menu_details=updated_menu_details, prediction=prediction)
 
 
 @app.route('/beverage')
 def beverage():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where menu_category='음료'")
     menu_details = cur.fetchall()
@@ -202,14 +219,15 @@ def beverage():
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('beverage.html', menu_details=updated_menu_details)
+    return render_template('beverage.html', menu_details=updated_menu_details, prediction=prediction)
 
 
 
 @app.route('/senior')
 def senior():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM menu")
+    cur.execute("SELECT m.* FROM menu m JOIN menu_reco mr ON m.menu_idx = mr.menu_idx and mr.reco_ages = %s ORDER BY mr.menu_sales DESC;", (prediction,))
     menu_details = cur.fetchall()
 
     cur.close()
@@ -219,15 +237,16 @@ def senior():
         image_base64 = menu[5]
         if isinstance(image_base64, bytes):
             menu_image = base64.b64encode(image_base64).decode('utf-8')
-            updated_menu = menu[:5] + (menu_image,)
+            updated_menu = menu[:5] + (menu_image,) + (menu[6],)
             updated_menu_details.append(updated_menu)
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('senior.html', menu_details=updated_menu_details)
+    return render_template('senior.html', menu_details=updated_menu_details, prediction=prediction)
 
 @app.route('/scoffee')
 def scoffee():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where menu_category='커피'")
     menu_details = cur.fetchall()
@@ -239,15 +258,16 @@ def scoffee():
         image_base64 = menu[5]
         if isinstance(image_base64, bytes):
             menu_image = base64.b64encode(image_base64).decode('utf-8')
-            updated_menu = menu[:5] + (menu_image,)
+            updated_menu = menu[:5] + (menu_image,) + (menu[6],)
             updated_menu_details.append(updated_menu)
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('scoffee.html', menu_details=updated_menu_details)
+    return render_template('scoffee.html', menu_details=updated_menu_details, prediction=prediction)
 
 @app.route('/snoncoffee')
 def snonoffee():
+    prediction = session.get('prediction', 'No prediction available')
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM menu where NOT menu_category='커피'")
     menu_details = cur.fetchall()
@@ -259,20 +279,24 @@ def snonoffee():
         image_base64 = menu[5]
         if isinstance(image_base64, bytes):
             menu_image = base64.b64encode(image_base64).decode('utf-8')
-            updated_menu = menu[:5] + (menu_image,)
+            updated_menu = menu[:5] + (menu_image,) + (menu[6],)
             updated_menu_details.append(updated_menu)
         else:
             app.logger.error(f"Invalid type for image data: {type(image_base64)}")
             updated_menu_details.append(menu)
-    return render_template('snoncoffee.html', menu_details=updated_menu_details)
+    return render_template('snoncoffee.html', menu_details=updated_menu_details, prediction=prediction)
 
 @app.route('/cart')
 def cart():
-    return render_template('cart.html')
+    prediction = session.get('prediction', 'No prediction available')
+    session['cartpage'] = 1
+    return render_template('cart.html', prediction=prediction)
 
 @app.route('/pay')
 def pay():
-    return render_template('pay.html')
+    prediction = session.get('prediction', 'No prediction available')
+    cartpage = session.get('cartpage', 0)
+    return render_template('pay.html', prediction=prediction, cartpage=cartpage)
 
 
 @app.route('/save', methods=['POST'])
@@ -287,16 +311,18 @@ def save():
     cur = mysql.connection.cursor()
 
     total_quantity = sum(int(item['quantity']) for item in cart_data)
+    # 적립여부 판별
+    if custnum is not None:
+        # 적립 시 회원여부 판별
+        custsel = cur.execute("SELECT * FROM customer where cust_phone = %s", (custnum,))
+        if custsel == 0:
+            cur.execute("INSERT INTO customer (cust_phone, cust_stamp, cust_ages) VALUES (%s, %s, %s)",
+                        (custnum, total_quantity, prediction))
+        else:
+            cur.execute("UPDATE customer SET cust_stamp=cust_stamp+%s where cust_phone = %s",
+                        (total_quantity, custnum))
 
-    print(total_quantity)
-    custsel = cur.execute("SELECT * FROM customer where cust_phone = %s", (custnum,))
 
-    if custsel == 0:
-        cur.execute("INSERT INTO customer (cust_phone, cust_stamp, cust_ages) VALUES (%s, %s, %s)",
-                    (custnum, total_quantity, prediction))
-    else:
-        cur.execute("UPDATE customer SET cust_stamp=cust_stamp+%s where cust_phone = %s",
-                    (total_quantity, custnum))
     # 장바구니 데이터 반복 처리
     for item in cart_data:
         # 메뉴 테이블에서 해당 메뉴 정보 조회
@@ -338,7 +364,86 @@ def get_stamp_info():
 
     return jsonify({'stamp_count': stamp_count})
 
+@app.route('/finish')
+def finish():
+    return render_template('finish.html')
 
+# 업로드 디렉토리 설정
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+
+
+@app.route('/upload_audio', methods=['POST'])
+def upload_audio():
+    if 'audio' not in request.files:
+        return jsonify({'success': False, 'message': 'No audio file uploaded'})
+
+    audio_file = request.files['audio']
+    if audio_file.filename == '':
+        return jsonify({'success': False, 'message': 'No selected file'})
+
+    file_path = os.path.join(UPLOAD_FOLDER, audio_file.filename)
+    audio_file.save(file_path)
+
+
+    return jsonify({'success': True})
+
+
+
+
+## 사운드처리
+import librosa
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+from pydub import AudioSegment
+
+@app.route('/predict_command')
+def predict_command():
+    file_path = 'uploads/recording.wav'
+    soundmodel = load_model('static/soundmodel.h5')
+
+    # AudioSegment를 로드합니다
+    audio = AudioSegment.from_file(file_path)
+
+    # 오디오 샘플링 레이트를 16000으로 변경합니다
+    audio = audio._spawn(audio.raw_data, overrides={
+        "frame_rate": 16000
+    })
+
+    # AudioSegment를 numpy 배열로 변환합니다
+    signal = np.array(audio.get_array_of_samples(), dtype=np.float32)
+    if audio.channels == 2:  # 스테레오 오디오인 경우
+        signal = signal.reshape((-1, 2)).mean(axis=1)  # 모노로 변환
+
+    sr = 16000
+
+    # 정규화 (16비트 PCM의 최대값으로 나누어 -1.0에서 1.0 사이의 값으로 변환)
+    signal /= np.iinfo(np.int16).max
+
+    # 멜 스펙트로그램을 계산합니다
+    mel_spec = librosa.feature.melspectrogram(y=signal, sr=sr, n_mels=256, n_fft=1024, hop_length=512)
+    mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
+
+    # 패딩 또는 잘라내기
+    max_length = 256
+    if mel_spec_db.shape[1] > max_length:
+        mel_spec_db = mel_spec_db[:, :max_length]
+    else:
+        pad_width = max_length - mel_spec_db.shape[1]
+        mel_spec_db = np.pad(mel_spec_db, ((0, 0), (0, pad_width)), mode='constant')
+
+    mel_spec_db = mel_spec_db[..., np.newaxis]  # 채널 차원 추가
+    mel_spec_db = np.expand_dims(mel_spec_db, axis=0)  # 배치 차원 추가
+
+    # 모델 예측
+    prediction = soundmodel.predict(mel_spec_db)
+    class_names = ['(ICE)아메리카노', '딸기라떼', '수박 주스']
+    predicted_class = np.argmax(prediction)
+    predicted_command = class_names[predicted_class]
+
+    return predicted_command
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000,

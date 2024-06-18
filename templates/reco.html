@@ -6,12 +6,14 @@
 
 
 <div id="main-content" class="container">
-    {% if prediction == 1 %}
-        <div class="modal">
+    {% if prediction == 2 %}
+        <div class="modalpop">
             <div class="modal_popup">
-                <h3>쉬운 선택화면으로 이동하시겠습니까?</h3>
+                <h3>쉬운 선택화면으로<br> 이동하시겠습니까?</h3>
+                <div class="btn_container">
                 <button type="button" class="move_btn" onclick="navigateTo('/senior')">이동하기</button>
                 <button type="button" class="close_btn">닫기</button>
+                </div>
             </div>
         </div>
     {% endif %}
@@ -20,7 +22,7 @@
 <div class="product" data-name="{{ menu[2] }}" data-price="{{ menu[4] }}" data-image="{{ menu[5] }}" data-idx="{{ menu[0] }}">
     <img src="data:image/jpeg;base64,{{ menu[5] }}" alt="Product Image" class="cart-item-image">
     <h2>{{ menu[2] }}</h2>
-    <p>{{ menu[4] }}</p>
+    <p id="price">{{ menu[4] }}</p>
 </div>
 {% endfor %}
 </div>
